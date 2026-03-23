@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HUMAIN Lab – HUman-centered Mixed Artificial Intelligence Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:   #1a4f7a;
+      --accent:    #2e8b57;
+      --light-bg:  #f5f8fc;
+      --white:     #ffffff;
+      --text:      #1e2a38;
+      --muted:     #5a6a7a;
+      --border:    #d8e4ef;
+      --gold:      #c9a92c;
+      --nav-h:     70px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.7;
+    }
+
+    /* ── LANGUAGE SWITCHER ── */
+    #lang-bar {
+      background: var(--primary);
+      color: #fff;
+      text-align: right;
+      padding: 6px 24px;
+      font-size: 13px;
+      letter-spacing: .04em;
+    }
+    #lang-bar button {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.4);
+      color: #fff;
+      padding: 3px 12px;
+      border-radius: 4px;
+      margin-left: 6px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 13px;
+      transition: background .2s;
+    }
+    #lang-bar button.active,
+    #lang-bar button:hover { background: rgba(255,255,255,.2); }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      gap: 0;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    .nav-brand {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary);
+      text-decoration: none;
+      margin-right: auto;
+      letter-spacing: -.02em;
+    }
+    .nav-brand span { color: var(--accent); }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 4px;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 6px;
+      transition: color .2s, background .2s;
+    }
+    .nav-links a:hover { color: var(--primary); background: var(--light-bg); }
+
+    /* hamburger */
+    #nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+    #nav-toggle span {
+      display: block; width: 24px; height: 2px; background: var(--primary);
+      margin: 5px 0; transition: .3s;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      background: linear-gradient(135deg, #0d2e4d 0%, #1a4f7a 50%, #1e6b5c 100%);
+      color: #fff;
+      padding: 80px 24px 60px;
+      text-align: center;
+    }
+    .hero-logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 32px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    .hero-logos img {
+      height: 90px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,.3));
+    }
+    .hero-logos .main-logo { height: 130px; }
+    #hero h1 {
+      font-size: clamp(26px, 5vw, 44px);
+      font-weight: 800;
+      letter-spacing: -.03em;
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+    #hero h1 em { font-style: normal; color: #7dd3b0; }
+    #hero .subtitle {
+      font-size: clamp(14px, 2vw, 18px);
+      font-weight: 300;
+      color: rgba(255,255,255,.8);
+      margin-bottom: 32px;
+      font-style: italic;
+    }
+    .hero-cta {
+      display: inline-flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn {
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform .15s, box-shadow .15s;
+      display: inline-block;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.2); }
+    .btn-primary { background: var(--accent); color: #fff; border: none; }
+    .btn-outline  { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,.6); }
+    .btn-outline:hover { background: rgba(255,255,255,.1); }
+
+    /* ── SECTIONS ── */
+    section { padding: 72px 24px; }
+    section:nth-child(even) { background: var(--light-bg); }
+
+    .container { max-width: 960px; margin: 0 auto; }
+
+    .section-tag {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: clamp(22px, 4vw, 34px);
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 20px;
+      letter-spacing: -.02em;
+      line-height: 1.2;
+    }
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    p { color: var(--muted); margin-bottom: 16px; }
+    p:last-child { margin-bottom: 0; }
+    strong { color: var(--text); font-weight: 600; }
+
+    .divider {
+      width: 48px; height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 2px;
+      margin-bottom: 32px;
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    @media (max-width: 700px) { .about-grid { grid-template-columns: 1fr; } }
+
+    .highlight-box {
+      background: linear-gradient(135deg, #e8f4ff, #e6f7ef);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      padding: 20px 24px;
+      margin-top: 20px;
+    }
+    .highlight-box p { color: var(--text); font-weight: 500; margin: 0; }
+
+    /* ── OBJECTIVES ── */
+    .objectives-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      margin-top: 8px;
+    }
+    .obj-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 24px;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .obj-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,.08); transform: translateY(-3px); }
+    .obj-icon {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+      font-size: 22px;
+    }
+    .obj-card h3 { font-size: 16px; margin-bottom: 10px; }
+    .obj-card p  { font-size: 14px; margin: 0; }
+
+    /* ── PARTNERS ── */
+    .partners-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 28px;
+      margin-top: 8px;
+    }
+    .partner-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px 20px 24px;
+      text-align: center;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .partner-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,.08); transform: translateY(-3px); }
+    .partner-card img {
+      height: 72px;
+      object-fit: contain;
+      margin-bottom: 16px;
+    }
+    .partner-card h3 { font-size: 15px; margin-bottom: 6px; }
+    .partner-card p  { font-size: 13px; color: var(--muted); margin: 0; }
+
+    /* ── MEMBERS ── */
+    .members-group { margin-bottom: 40px; }
+    .members-group-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+    }
+    .members-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+    }
+    .member-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      transition: box-shadow .2s;
+    }
+    .member-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+    .member-avatar {
+      width: 40px; height: 40px; min-width: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 700; color: #fff;
+    }
+    .member-name  { font-size: 14px; font-weight: 600; color: var(--text); }
+    .member-lab   { font-size: 12px; color: var(--muted); }
+    .member-email { font-size: 12px; }
+    .member-email a { color: var(--accent); text-decoration: none; }
+    .member-email a:hover { text-decoration: underline; }
+
+    /* ── CONTACT ── */
+    #contact { background: linear-gradient(135deg, #0d2e4d 0%, #1a4f7a 100%); color: #fff; }
+    #contact h2    { color: #fff; }
+    #contact p     { color: rgba(255,255,255,.75); }
+    #contact .section-tag { color: #7dd3b0; }
+    .contact-box {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 14px;
+      padding: 36px;
+      margin-top: 28px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+    .contact-avatar {
+      width: 64px; height: 64px; min-width: 64px;
+      background: linear-gradient(135deg, var(--accent), #7dd3b0);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; font-weight: 800; color: #fff;
+    }
+    .contact-info h3 { color: #fff; font-size: 18px; margin-bottom: 4px; }
+    .contact-info p  { color: rgba(255,255,255,.7); font-size: 14px; margin: 0; }
+    .contact-info a  { color: #7dd3b0; text-decoration: none; }
+    .contact-info a:hover { text-decoration: underline; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #07182b;
+      color: rgba(255,255,255,.5);
+      text-align: center;
+      padding: 24px;
+      font-size: 13px;
+    }
+    footer a { color: rgba(255,255,255,.6); }
+
+    /* ── RESPONSIVE NAV ── */
+    @media (max-width: 768px) {
+      #nav-toggle { display: block; margin-left: auto; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: var(--nav-h);
+        left: 0; right: 0;
+        background: var(--white);
+        flex-direction: column;
+        padding: 12px 16px 20px;
+        border-bottom: 1px solid var(--border);
+        box-shadow: 0 8px 24px rgba(0,0,0,.08);
+        gap: 2px;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { display: block; padding: 10px 14px; }
+    }
+
+    /* language classes */
+    [data-lang="en"] { display: none; }
+    body.lang-en [data-lang="it"] { display: none; }
+    body.lang-en [data-lang="en"] { display: revert; }
+  </style>
+</head>
+<body class="lang-it">
+
+<!-- ── LANGUAGE BAR ── -->
+<div id="lang-bar">
+  <span data-lang="it">Lingua:</span>
+  <span data-lang="en">Language:</span>
+  <button id="btn-it" class="active" onclick="setLang('it')">IT</button>
+  <button id="btn-en" onclick="setLang('en')">EN</button>
+</div>
+
+<!-- ── NAVIGATION ── -->
+<nav id="main-nav">
+  <a class="nav-brand" href="#hero">HUMAIN <span>Lab</span></a>
+
+  <button id="nav-toggle" aria-label="Menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#about"      data-lang="it">Chi Siamo</a>     <a href="#about"      data-lang="en">About</a></li>
+    <li><a href="#objectives" data-lang="it">Obiettivi</a>     <a href="#objectives" data-lang="en">Objectives</a></li>
+    <li><a href="#partners"   data-lang="it">Partner</a>       <a href="#partners"   data-lang="en">Partners</a></li>
+    <li><a href="#members"    data-lang="it">Afferenti</a>     <a href="#members"    data-lang="en">Members</a></li>
+    <li><a href="#contact"    data-lang="it">Contatti</a>      <a href="#contact"    data-lang="en">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-logos">
+      <img src="images/logo-unicas.png" alt="Università di Cassino e del Lazio Meridionale" />
+      <img src="images/logo-humain.png" alt="HUMAIN Lab" class="main-logo" />
+      <img src="images/logo-aida.png" alt="AIDA Lab" />
+    </div>
+
+    <p class="section-tag">Università di Cassino e del Lazio Meridionale</p>
+
+    <h1>
+      <em>HUMAIN</em> Lab<br />
+      <span data-lang="it">HUman-centered Mixed Artificial Intelligence Network</span>
+      <span data-lang="en">HUman-centered Mixed Artificial Intelligence Network</span>
+    </h1>
+
+    <p class="subtitle" data-lang="it">Laboratorio <strong style="color:#7dd3b0;font-weight:600;">Collaborativo</strong> per l'IA nei Processi Educativi</p>
+    <p class="subtitle" data-lang="en">Collaborative Laboratory for AI in Educational Processes</p>
+
+    <div class="hero-cta">
+      <a href="#about"   class="btn btn-primary" data-lang="it">Scopri di più</a>
+      <a href="#about"   class="btn btn-primary" data-lang="en">Learn More</a>
+      <a href="#contact" class="btn btn-outline"  data-lang="it">Aderire al Lab</a>
+      <a href="#contact" class="btn btn-outline"  data-lang="en">Join the Lab</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="container">
+    <p class="section-tag" data-lang="it">Chi Siamo</p>
+    <p class="section-tag" data-lang="en">About Us</p>
+
+    <h2 data-lang="it">Un ecosistema territoriale per l'IA nell'educazione</h2>
+    <h2 data-lang="en">A territorial ecosystem for AI in education</h2>
+    <div class="divider"></div>
+
+    <div class="about-grid">
+      <div>
+        <p data-lang="it">
+          L'<strong>Università di Cassino e del Lazio Meridionale</strong>, attraverso la sinergia
+          tra i laboratori <strong>AIDA</strong> (Artificial Intelligence and Data Analysis) e
+          <strong>ELITE</strong> (Education: Learning, Inclusion, Technology, Embodiment), ha
+          fondato l'HUMAIN Lab in collaborazione con l'<strong>Ordine degli Ingegneri della
+          Provincia di Frosinone</strong> — attraverso la propria Commissione sull'IA — e con
+          l'associazione <strong>TIRESIA</strong> (Team Interateneo Ricerca Educativa su
+          Intelligenza Artificiale).
+        </p>
+        <p data-lang="it">
+          Nasce così un laboratorio congiunto <strong>Università–Scuola–Ordine</strong>, che
+          coinvolge gli istituti di Cassino e Frosinone in una riflessione critica
+          sull'Intelligenza Artificiale applicata alla didattica.
+        </p>
+
+        <p data-lang="en">
+          The <strong>University of Cassino and Southern Lazio</strong>, through the synergy between
+          the <strong>AIDA</strong> (Artificial Intelligence and Data Analysis) and <strong>ELITE</strong>
+          (Education: Learning, Inclusion, Technology, Embodiment) laboratories, founded HUMAIN Lab
+          in collaboration with the <strong>Order of Engineers of the Province of Frosinone</strong>
+          — through its AI Commission — and with the association <strong>TIRESIA</strong>
+          (Interuniversity Team for Educational Research on Artificial Intelligence).
+        </p>
+        <p data-lang="en">
+          The result is a joint <strong>University–School–Professional Order</strong> laboratory,
+          involving institutes in Cassino and Frosinone in a critical reflection on Artificial
+          Intelligence applied to teaching.
+        </p>
+      </div>
+
+      <div>
+        <p data-lang="it">
+          Lontano dalla logica del trasferimento unidirezionale, l'HUMAIN Lab è uno
+          <strong>spazio orizzontale di sperimentazione e confronto</strong> in cui docenti
+          universitari, ingegneri e insegnanti operano su un piano paritario per condividere
+          pratiche, dubbi e criticità legate all'integrazione dell'IA nei contesti educativi reali.
+        </p>
+
+        <p data-lang="en">
+          Moving away from one-directional knowledge transfer, HUMAIN Lab is a
+          <strong>horizontal space for experimentation and exchange</strong> where university
+          professors, engineers, and school teachers work as equals to share practices, doubts,
+          and critical issues related to integrating AI in real educational contexts.
+        </p>
+
+        <div class="highlight-box">
+          <p data-lang="it">
+            L'HUMAIN Lab è una <strong>comunità di pratica territoriale</strong> e un laboratorio
+            socio-tecnico volto a formare professionisti e docenti capaci di governare
+            l'innovazione in modo critico, responsabile e creativo.
+          </p>
+          <p data-lang="en">
+            HUMAIN Lab is a <strong>territorial community of practice</strong> and a socio-technical
+            laboratory aimed at training professionals and teachers able to govern innovation
+            in a critical, responsible, and creative way.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── OBJECTIVES ── -->
+<section id="objectives">
+  <div class="container">
+    <p class="section-tag" data-lang="it">Obiettivi</p>
+    <p class="section-tag" data-lang="en">Objectives</p>
+
+    <h2 data-lang="it">Obiettivi Strategici</h2>
+    <h2 data-lang="en">Strategic Goals</h2>
+    <div class="divider"></div>
+
+    <div class="objectives-grid">
+      <div class="obj-card">
+        <div class="obj-icon">🧭</div>
+        <h3 data-lang="it">Cultura dell'IA Consapevole</h3>
+        <h3 data-lang="en">Responsible AI Culture</h3>
+        <p data-lang="it">Analizzare rischi etici e potenzialità professionali dell'Intelligenza Artificiale nel contesto educativo.</p>
+        <p data-lang="en">Analysing the ethical risks and professional potential of Artificial Intelligence in educational settings.</p>
+      </div>
+
+      <div class="obj-card">
+        <div class="obj-icon">🔄</div>
+        <h3 data-lang="it">Rinnovare le Prassi Didattiche</h3>
+        <h3 data-lang="en">Renewing Teaching Practices</h3>
+        <p data-lang="it">Validare modelli "Human-in-the-loop" dove l'IA potenzia l'autonomia del docente senza sostituirne il ruolo.</p>
+        <p data-lang="en">Validating "Human-in-the-loop" models where AI enhances teacher autonomy without replacing their role.</p>
+      </div>
+
+      <div class="obj-card">
+        <div class="obj-icon">🛠️</div>
+        <h3 data-lang="it">Coprogettare Soluzioni</h3>
+        <h3 data-lang="en">Co-designing Solutions</h3>
+        <p data-lang="it">Sviluppare prototipi di tutoring e design di prompt avanzati testati direttamente "sul campo".</p>
+        <p data-lang="en">Developing tutoring prototypes and advanced prompt designs tested directly "in the field".</p>
+      </div>
+
+      <div class="obj-card">
+        <div class="obj-icon">📊</div>
+        <h3 data-lang="it">Analizzare l'Impatto Reale</h3>
+        <h3 data-lang="en">Analysing Real Impact</h3>
+        <p data-lang="it">Monitorare la diffusione dell'IA in linea con i framework di competenza digitale (es. DigComp).</p>
+        <p data-lang="en">Monitoring the spread of AI in line with digital competence frameworks (e.g. DigComp).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PARTNERS ── -->
+<section id="partners">
+  <div class="container">
+    <p class="section-tag" data-lang="it">Partner</p>
+    <p class="section-tag" data-lang="en">Partners</p>
+
+    <h2 data-lang="it">Le Istituzioni del Laboratorio</h2>
+    <h2 data-lang="en">Lab Institutions</h2>
+    <div class="divider"></div>
+
+    <div class="partners-grid">
+      <div class="partner-card">
+        <img src="images/logo-unicas.png" alt="UniCas" />
+        <h3 data-lang="it">Università di Cassino<br />e del Lazio Meridionale</h3>
+        <h3 data-lang="en">University of Cassino<br />and Southern Lazio</h3>
+        <p data-lang="it">Istituzione promotrice attraverso i laboratori AIDA ed ELITE.</p>
+        <p data-lang="en">Founding institution through the AIDA and ELITE laboratories.</p>
+      </div>
+
+      <div class="partner-card">
+        <img src="images/logo-aida.png" alt="AIDA Lab" />
+        <h3>Lab AIDA</h3>
+        <p>Artificial Intelligence and Data Analysis</p>
+      </div>
+
+      <div class="partner-card">
+        <img src="images/logo-elite.png" alt="ELITE Lab" />
+        <h3>Lab ELITE</h3>
+        <p>Education: Learning, Inclusion, Technology, Embodiment</p>
+      </div>
+
+      <div class="partner-card">
+        <img src="images/logo-tiresia.png" alt="TIRESIA" />
+        <h3>TIRESIA</h3>
+        <p data-lang="it">Team Interateneo Ricerca Educativa su Intelligenza Artificiale</p>
+        <p data-lang="en">Interuniversity Team for Educational Research on Artificial Intelligence</p>
+      </div>
+
+      <div class="partner-card" style="grid-column: auto;">
+        <div style="height:72px; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+          <div style="width:72px;height:72px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;font-weight:800;">⚙</div>
+        </div>
+        <h3 data-lang="it">Ordine degli Ingegneri<br />di Frosinone</h3>
+        <h3 data-lang="en">Order of Engineers<br />of Frosinone</h3>
+        <p data-lang="it">Commissione sull'IA — promuove l'innovazione nelle pratiche professionali.</p>
+        <p data-lang="en">AI Commission — promoting innovation in professional practice.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MEMBERS ── -->
+<section id="members">
+  <div class="container">
+    <p class="section-tag" data-lang="it">Afferenti</p>
+    <p class="section-tag" data-lang="en">Members</p>
+
+    <h2 data-lang="it">Il Team</h2>
+    <h2 data-lang="en">The Team</h2>
+    <div class="divider"></div>
+
+    <!-- AIDA -->
+    <div class="members-group">
+      <div class="members-group-title">Lab AIDA — Artificial Intelligence and Data Analysis</div>
+      <div class="members-list">
+        <div class="member-item">
+          <div class="member-avatar">MM</div>
+          <div>
+            <div class="member-name">Prof. Mario Molinara</div>
+            <div class="member-lab">Lab AIDA</div>
+            <div class="member-email"><a href="mailto:m.molinara@unicas.it">m.molinara@unicas.it</a></div>
+          </div>
+        </div>
+        <div class="member-item">
+          <div class="member-avatar">TD</div>
+          <div>
+            <div class="member-name">Prof. Tiziana D'Alessandro</div>
+            <div class="member-lab">Lab AIDA</div>
+            <div class="member-email"><a href="mailto:tiziana.dalessandro@unicas.it">tiziana.dalessandro@unicas.it</a></div>
+          </div>
+        </div>
+        <div class="member-item">
+          <div class="member-avatar">FF</div>
+          <div>
+            <div class="member-name">Prof. Francesco Fontanella</div>
+            <div class="member-lab">Lab AIDA</div>
+            <div class="member-email"><a href="mailto:fontanella@unicas.it">fontanella@unicas.it</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ELITE -->
+    <div class="members-group">
+      <div class="members-group-title">Lab ELITE — Education: Learning, Inclusion, Technology, Embodiment</div>
+      <div class="members-list">
+        <div class="member-item">
+          <div class="member-avatar">MD</div>
+          <div>
+            <div class="member-name">Prof. Monica Di Domenico</div>
+            <div class="member-lab">Lab ELITE</div>
+            <div class="member-email"><a href="mailto:monica.didomenico@unicas.it">monica.didomenico@unicas.it</a></div>
+          </div>
+        </div>
+        <div class="member-item">
+          <div class="member-avatar">SD</div>
+          <div>
+            <div class="member-name">Prof. Simone Digennaro</div>
+            <div class="member-lab">Lab ELITE</div>
+            <div class="member-email"><a href="mailto:s.digennaro@unicas.it">s.digennaro@unicas.it</a></div>
+          </div>
+        </div>
+        <div class="member-item">
+          <div class="member-avatar">PD</div>
+          <div>
+            <div class="member-name">Prof. Pierluigi Diotaiuti</div>
+            <div class="member-lab">Lab ELITE</div>
+            <div class="member-email"><a href="mailto:p.diotaiuti@unicas.it">p.diotaiuti@unicas.it</a></div>
+          </div>
+        </div>
+        <div class="member-item">
+          <div class="member-avatar">PT</div>
+          <div>
+            <div class="member-name">Prof. Pio Alfredo Di Tore</div>
+            <div class="member-lab">Lab ELITE</div>
+            <div class="member-email"><a href="mailto:pioalfredo.ditore@unicas.it">pioalfredo.ditore@unicas.it</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Other -->
+    <div class="members-group">
+      <div class="members-group-title" data-lang="it">Altri Afferenti</div>
+      <div class="members-group-title" data-lang="en">Other Members</div>
+      <div class="members-list">
+        <div class="member-item">
+          <div class="member-avatar">AC</div>
+          <div>
+            <div class="member-name">Prof. Antonia Carlini</div>
+            <div class="member-lab" data-lang="it">Membro esterno</div>
+            <div class="member-lab" data-lang="en">External member</div>
+            <div class="member-email"><a href="mailto:a.carlini65@gmail.com">a.carlini65@gmail.com</a></div>
+          </div>
+        </div>
+        <div class="member-item">
+          <div class="member-avatar">GM</div>
+          <div>
+            <div class="member-name">Ing. Giovanni Masi</div>
+            <div class="member-lab" data-lang="it">Ordine degli Ingegneri di Frosinone</div>
+            <div class="member-lab" data-lang="en">Order of Engineers of Frosinone</div>
+            <div class="member-email"><a href="mailto:gio.masi@libero.it">gio.masi@libero.it</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="container">
+    <p class="section-tag" data-lang="it">Contatti e Adesioni</p>
+    <p class="section-tag" data-lang="en">Contact &amp; Join</p>
+
+    <h2 data-lang="it">Vuoi unirti al Laboratorio?</h2>
+    <h2 data-lang="en">Want to join the Lab?</h2>
+
+    <p data-lang="it">
+      I dirigenti scolastici, i docenti e le organizzazioni del Terzo Settore interessati
+      a unirsi al laboratorio possono contattare il referente del progetto.
+    </p>
+    <p data-lang="en">
+      School principals, teachers, and Third Sector organisations interested in joining
+      the laboratory are welcome to contact the project coordinator.
+    </p>
+
+    <div class="contact-box">
+      <div class="contact-avatar">MM</div>
+      <div class="contact-info">
+        <h3>Prof. Mario Molinara</h3>
+        <p data-lang="it">Referente HUMAIN Lab · Laboratorio AIDA · Università di Cassino e del Lazio Meridionale</p>
+        <p data-lang="en">HUMAIN Lab Coordinator · AIDA Lab · University of Cassino and Southern Lazio</p>
+        <p style="margin-top:8px;"><a href="mailto:m.molinara@unicas.it">m.molinara@unicas.it</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>
+    &copy; 2025 HUMAIN Lab —
+    <span data-lang="it">Università di Cassino e del Lazio Meridionale</span>
+    <span data-lang="en">University of Cassino and Southern Lazio</span>
+    &nbsp;|&nbsp;
+    <span data-lang="it">Tutti i diritti riservati</span>
+    <span data-lang="en">All rights reserved</span>
+  </p>
+</footer>
+
+<script>
+  function setLang(lang) {
+    document.body.classList.toggle('lang-en', lang === 'en');
+    document.getElementById('btn-it').classList.toggle('active', lang === 'it');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  }
+
+  function toggleMenu() {
+    document.getElementById('nav-links').classList.toggle('open');
+  }
+
+  // Close menu on link click
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.getElementById('nav-links').classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>
