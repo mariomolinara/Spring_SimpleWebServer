@@ -1,0 +1,46 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    color: #1f2937;
+}
+
+.game-page {
+    width: min(560px, 92vw);
+    text-align: center;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 12px 30px rgba(31, 41, 55, 0.12);
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+#playButton {
+    background: #10b981;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#status {
+    min-height: 24px;
+}
+
+#gameCanvas {
+    border: 2px solid #111827;
+    background: #f8fafc;
+}
+
